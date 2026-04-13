@@ -127,6 +127,41 @@ After doubling energy importance and halving genre importance the results became
 
 ---
 
+## Optional Challenges
+
+### Challenge 3: Diversity and Fairness Logic
+
+A diversity penalty was added to `recommend_songs` that prevents the same artist or genre from appearing more than twice in the top 5 results. The selection walks through the sorted list and skips any song whose artist or genre has already appeared twice, continuing until 5 unique results are collected. This directly addresses the catalog imbalance limitation — without it, Imagine Dragons could take 3 of the 5 slots for an alternative rock user.
+
+### Challenge 2: Multiple Scoring Modes
+
+Three scoring modes were added to the recommender, selectable per profile:
+
+| Mode | What it prioritizes | Genre weight | Mood weight | Energy weight |
+|---|---|---|---|---|
+| `default` | Balanced | 1.0 | 1.0 | 2.0 |
+| `genre-first` | Genre identity | 3.0 | 1.0 | 1.0 |
+| `mood-first` | Emotional feel | 1.0 | 3.0 | 1.0 |
+| `energy-first` | Sonic intensity | 1.0 | 1.0 | 4.0 |
+
+The mode comparison was run on the conflicting profile (high energy + melancholic) to show the clearest contrast:
+
+**Genre-First mode:**
+
+![Genre First](screenshots/genre%20first%20mode.png)
+
+**Mood-First mode:**
+
+![Mood First](screenshots/mood%20first%20mode.png)
+
+**Energy-First mode:**
+
+![Energy First](screenshots/energy%20first%20mode%20.png)
+
+The Energy-First mode produced the most intuitive result for the conflicting profile — Rolling in the Deep ranked #1 because it is both Adele (soul pop) and genuinely high energy, satisfying both sides of the conflict. The Mood-First mode pulled all melancholic songs to the top including Moonlight Sonata, showing how purely emotional labeling creates its own filter bubble.
+
+---
+
 ## Limitations and Risks
 
 Summarize some limitations of your recommender.

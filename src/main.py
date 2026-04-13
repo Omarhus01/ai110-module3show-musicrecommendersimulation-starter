@@ -112,9 +112,19 @@ def main() -> None:
     songs = load_songs("data/songs.csv")
     print(f"Loaded songs: {len(songs)}")
 
+    # Run all profiles with default mode
     for profile_name, user_prefs in PROFILES:
-        recommendations = recommend_songs(user_prefs, songs, k=5)
+        recommendations = recommend_songs(user_prefs, songs, k=5, mode="default")
         print_recommendations(profile_name, recommendations)
+
+    # Demonstrate scoring modes using the conflicting profile
+    print("\n" + "#" * 60)
+    print("  SCORING MODE COMPARISON — Conflicting Profile")
+    print("#" * 60)
+    _, conflicting_prefs = PROFILES[3]
+    for mode in ["genre-first", "mood-first", "energy-first"]:
+        recommendations = recommend_songs(conflicting_prefs, songs, k=5, mode=mode)
+        print_recommendations(f"Conflicting — {mode.upper()} mode", recommendations)
 
 
 if __name__ == "__main__":
