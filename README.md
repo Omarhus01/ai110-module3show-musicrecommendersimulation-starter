@@ -131,6 +131,18 @@ You will go deeper on this in your model card.
 
 ---
 
+## Screenshots
+
+**Standard format output:**
+
+![Normal format](screenshots/normal%20form.png)
+
+**Table format output (tabulate):**
+
+![Tabulate format](screenshots/tabulate.png)
+
+---
+
 ## Reflection
 
 Read and complete `model_card.md`:
