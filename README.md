@@ -129,6 +129,16 @@ After doubling energy importance and halving genre importance the results became
 
 ## Optional Challenges
 
+### Challenge 4: Visual Summary Table
+
+The terminal output was improved using the `tabulate` library. Instead of plain text, recommendations are displayed as a formatted table showing rank, title, artist, genre, mood, and score. A separate reasons section below the table explains why each song was recommended using the scoring breakdown. The `tabulate` library was added to `requirements.txt` and the output format uses the `outline` style for clean ASCII borders compatible with Windows terminal encoding.
+
+**Example output:**
+
+![Tabulate format](screenshots/tabulate.png)
+
+---
+
 ### Challenge 3: Diversity and Fairness Logic
 
 A diversity penalty was added to `recommend_songs` that prevents the same artist or genre from appearing more than twice in the top 5 results. The selection walks through the sorted list and skips any song whose artist or genre has already appeared twice, continuing until 5 unique results are collected. This directly addresses the catalog imbalance limitation — without it, Imagine Dragons could take 3 of the 5 slots for an alternative rock user.
