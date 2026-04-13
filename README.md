@@ -47,16 +47,16 @@ For every song in the catalog, the system computes a score by asking: how well d
 For each song in the catalog the system computes a score as follows:
 
 ```
-+ 2.0   if genre matches favorite_genre
++ 1.0   if genre matches favorite_genre
 + 1.0   if mood matches favorite_mood
-+ 1.0 × (1 - |song.energy - target_energy|)
++ 2.0 × (1 - |song.energy - target_energy|)
 + 0.5 × (1 - |song.valence - target_valence|)
 + 0.5 × song.acousticness        (if likes_acoustic is True)
   or
   0.5 × (1 - song.acousticness)  (if likes_acoustic is False)
 + 0.5 × (1 - |song.instrumentalness - target_instrumentalness|)
 ─────────────────────────────────────────────
-  Max possible score: 5.5
+  Max possible score: 6.5
 ```
 
 All songs are then sorted by score descending and the top K are returned.
@@ -109,11 +109,21 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+Seven user profiles were tested — three standard and four adversarial edge cases.
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+- **High-Energy Pop:** Sunrise City ranked #1 with a strong genre and mood match. Results felt intuitive and matched expectations for a happy pop listener.
+
+- **Deep Intense Rock:** Storm Runner scored 5.45/5.5 — nearly perfect. However, only one rock song exists in the catalog so there was no variety beyond #1.
+
+- **Conflicting profile (High Energy + Melancholic):** This is the profile closest to a real personal taste — wanting emotionally heavy songs with high energy (think Adele, Imagine Dragons). Hello by Adele ranked #1 despite the user wanting energy=0.90. The genre and mood match (+3.0 combined) outweighed the energy mismatch entirely, confirming genre dominance bias. The system prioritized the emotional label over the actual sonic intensity.
+
+- **Missing Genre (Jazz Fusion):** Max score dropped to 3.44 because no genre match was ever possible. The system still returned reasonable low-energy acoustic songs based on numerical features alone, showing it degrades gracefully.
+
+- **Dead Center (All 0.5):** Spacewalk Thoughts won purely from a genre match (ambient) despite not matching mood or any numerical target well. Confirms that even a weak genre match dominates over strong numerical alignment.
+
+**Weight Shift Experiment — genre 2.0 → 1.0, energy 1.0 → 2.0:**
+
+After doubling energy importance and halving genre importance the results became more diverse and slightly more accurate. The conflicting profile (high energy + melancholic) now surfaces Storm Runner and Believer in the top 5 because their energy alignment is rewarded more. The dead center profile shifted its #1 from Spacewalk Thoughts (genre win) to Focus Flow (energy + mood win). These weights were kept as the final configuration because they reduce genre dominance without eliminating it entirely.
 
 ---
 
@@ -140,6 +150,38 @@ You will go deeper on this in your model card.
 **Table format output (tabulate):**
 
 ![Tabulate format](screenshots/tabulate.png)
+
+---
+
+### Profile Results
+
+**High-Energy Pop:**
+
+![High Energy Pop](screenshots/profile_high_energy_pop.png)
+
+**Chill Lofi:**
+
+![Chill Lofi](screenshots/chill%20lofi.png)
+
+**Deep Intense Rock:**
+
+![Deep Intense Rock](screenshots/deep%20intense%20rock.png)
+
+**Conflicting — High Energy + Melancholic:**
+
+![Conflicting](screenshots/conflicting.png)
+
+**Missing Genre — Jazz Fusion:**
+
+![Missing Genre](screenshots/missing%20genre.png)
+
+**Wants Instrumental but Likes Pop:**
+
+![Wants Instrumental](screenshots/wantts%20instrumental.png)
+
+**Dead Center — All 0.5:**
+
+![Dead Center](screenshots/dead%20center.png)
 
 ---
 
